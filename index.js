@@ -14,8 +14,6 @@ app.use(express.json());
 
 app.use('/public', express.static(`${process.cwd()}/public`));
 
-const port = process.env.PORT || 3000;
-
 // Página principal
 app.get('/', function(req, res) {
   res.sendFile(process.cwd() + '/views/index.html');
@@ -38,6 +36,7 @@ app.post('/api/shorturl', function(req, res) {
     return res.json({ error: 'invalid url' });
   }
 
+  // Validar protocolo
   if (
     parsedUrl.protocol !== 'http:' &&
     parsedUrl.protocol !== 'https:'
@@ -45,6 +44,7 @@ app.post('/api/shorturl', function(req, res) {
     return res.json({ error: 'invalid url' });
   }
 
+  // Validar dominio
   dns.lookup(parsedUrl.hostname, (err) => {
 
     if (err) {
